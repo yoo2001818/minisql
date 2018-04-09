@@ -87,3 +87,19 @@ We can start building a database upon it.
 ### Table / B+Tree storage
 After building a filesystem, we need to build a table and B+Tree storage
 upon it.
+
+#### Table storage
+Table storage is an incrementing file with offset pointers and big data chunk.
+
+Basically, all data accumulates on the data chunk file, and offset pointers are
+written in the offset file.
+
+Offset file has a deterministic positioning - offset file can be located using
+(12 * row ID).
+
+This way, the data will only accumulate - it'll never shrink! so we need
+vacuuming - trimming deleted data out. Of course, we need to mark the deleted
+data - so we need to manage deleted fragments list too.
+
+We also need a metadata file - containing auto increment key, row ID, length,
+to-be-deleted fragment list.
