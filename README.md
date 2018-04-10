@@ -103,3 +103,18 @@ data - so we need to manage deleted fragments list too.
 
 We also need a metadata file - containing auto increment key, row ID, length,
 to-be-deleted fragment list.
+
+#### B+Tree storage
+B+Tree storage is an incrementing file with fixed B+Tree node blocks.
+
+Since B+Tree node's size is completely fixed, that means string's max size must
+be specified as well - otherwise it can't be filled up. We're setting node's
+hard limit to 512 bytes.
+
+Each node's size is user-customizable, but the default would be around 64kB.
+
+B+Tree node can appear in random position, and root node can move, so we need to
+manage the position / metadata / block bitmap too.
+
+We can put that kind of data in the first sector of the index, or another
+file. Putting them in another file will be much easier.
